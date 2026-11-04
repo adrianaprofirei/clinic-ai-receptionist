@@ -19,6 +19,7 @@ from datetime import datetime, timedelta
 from sqlalchemy.orm import Session
 
 from ..clinic import SERVICES_BY_ID, Service
+from ..i18n import fmt_time, weekday_name
 from ..models import Booking, ChatMessage
 from .. import scheduling as sch
 from . import cards
@@ -28,11 +29,14 @@ PENDING_TTL = timedelta(minutes=15)
 
 
 def booking_event(booking: Booking) -> dict:
+    """Payload of the booking.* events sent to the reception dashboard."""
     return {
         "id": booking.id,
         "code": booking.code,
         "service_id": booking.service_id,
+        "service_label": SERVICES_BY_ID[booking.service_id].label["ro"],
         "start": booking.start.isoformat(timespec="minutes"),
+        "when_label": f"{weekday_name(booking.start.date(), 'ro')}, {fmt_time(booking.start)}",
         "patient_name": booking.patient_name,
         "source": booking.source,
         "status": booking.status,

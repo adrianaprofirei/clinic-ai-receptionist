@@ -260,7 +260,6 @@
 
 .msg-block { display: flex; flex-direction: column; gap: 4px; }
 .chat-panel:focus { outline: none; }
-html.chat-locked, html.chat-locked body { overflow: hidden; }
 
 /* phones: the chat takes the whole screen, like the 390 × 844 artboards */
 @media (max-width: 560px) {

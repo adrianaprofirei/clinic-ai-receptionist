@@ -202,3 +202,6 @@ a:hover { color: var(--pine-hover); }
 .dots span:nth-child(3) { animation-delay: .4s; }
 
 [hidden] { display: none !important; }
+
+/* scroll lock while a full-screen chat or sheet is open */
+html.chat-locked, html.chat-locked body { overflow: hidden; }

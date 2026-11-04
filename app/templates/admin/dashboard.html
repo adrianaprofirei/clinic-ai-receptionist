@@ -1,0 +1,98 @@
+{% extends "_layout.html" %}
+{% import "_macros.html" as ui %}
+
+{% block title %}Săptămâna · Panou recepție · {{ clinic.name }}{% endblock %}
+{% block robots %}noindex, nofollow{% endblock %}
+{% block styles %}<link rel="stylesheet" href="{{ asset('css/admin.css') }}">{% endblock %}
+{% block body_class %}admin-page{% endblock %}
+
+{% block body %}
+<div class="admin" data-admin>
+  <header class="admin-header">
+    <div class="admin-header__left">
+      <div class="admin-brand">
+        {{ ui.logo(36) }}
+        <p>
+          <span class="admin-brand__name"><span class="hide-sm">{{ clinic.brand }}</span><span class="show-sm">Recepție</span></span>
+          <span class="admin-brand__sub"><span class="hide-sm">Panou recepție</span><span class="show-sm">Demo – clinică fictivă</span></span>
+        </p>
+      </div>
+      <span class="tag tag--demo">Demo – clinică fictivă</span>
+    </div>
+    <div class="admin-header__right">
+      <p class="live" role="status" data-live>
+        <span class="live__dot" aria-hidden="true"><span></span><span></span></span>
+        <span data-live-text>Se încarcă…</span>
+      </p>
+      <form method="post" action="/admin/logout">
+        <button class="btn btn--soft" type="submit" aria-label="Deconectare">{{ ui.icon("logout", 18) }}<span class="hide-sm">Deconectare</span></button>
+      </form>
+    </div>
+  </header>
+
+  <main class="admin-main" id="continut">
+    <div class="toast" role="status" data-toast hidden>
+      <span class="toast__icon">{{ ui.icon("chat", 20) }}</span>
+      <div class="toast__body">
+        <p class="toast__title">Programare nouă prin asistent</p>
+        <p class="toast__text" data-toast-text></p>
+        <button class="toast__link" type="button" data-toast-open>Vezi detaliile</button>
+      </div>
+      <button class="icon-button icon-button--on-dark" type="button" aria-label="Închide notificarea" data-toast-close>{{ ui.icon("close", 18, 2.4) }}</button>
+    </div>
+
+    <div class="toolbar">
+      <div class="toolbar__left">
+        <h1 data-week-label>&nbsp;</h1>
+        <div class="week-nav" role="group" aria-label="Alege săptămâna">
+          <button class="square-button" type="button" aria-label="Săptămâna anterioară" data-week-nav="prev">{{ ui.icon("chevron-left", 18, 2.2) }}</button>
+          <button class="square-button square-button--text" type="button" data-week-nav="this">Azi</button>
+          <button class="square-button" type="button" aria-label="Săptămâna următoare" data-week-nav="next">{{ ui.icon("chevron-right", 18, 2.2) }}</button>
+        </div>
+      </div>
+      <dl class="stats">
+        <div><dt>Azi</dt><dd data-stat="today">–</dd></div>
+        <div><dt>Mâine</dt><dd data-stat="tomorrow">–</dd></div>
+        <div><dt>Săptămâna</dt><dd data-stat="week">–</dd></div>
+      </dl>
+    </div>
+
+    <ul class="legend" aria-label="Legendă">
+      {% for item in legend %}
+      <li><span class="legend__swatch" data-color="{{ item.color }}" data-accent="{{ item.accent }}"></span>{{ item.label }}</li>
+      {% endfor %}
+      <li><span class="legend__swatch legend__swatch--new"></span>Nouă, prin asistent</li>
+      <li><span class="legend__swatch legend__swatch--done"></span>Încheiată</li>
+    </ul>
+
+    <div class="board">
+      <section class="calendar" aria-label="Calendarul săptămânii">
+        <div class="calendar__scroll">
+          <div class="calendar__inner">
+            <div class="calendar__head" data-cal-head></div>
+            <div class="calendar__body" data-cal-body></div>
+          </div>
+        </div>
+      </section>
+
+      <aside class="details" aria-labelledby="details-title">
+        <h2 class="details__title" id="details-title">Detalii programare</h2>
+        <div class="details__content" data-details></div>
+        <p class="details__note">Datele demo se șterg automat după 24 de ore. Programările de exemplu revin zilnic.</p>
+      </aside>
+    </div>
+
+    <section class="phone-view" aria-label="Programările zilei">
+      <nav class="day-tabs" aria-label="Zilele săptămânii" data-day-tabs></nav>
+      <div class="day-list" data-day-list></div>
+    </section>
+  </main>
+
+  <div class="sheet" data-sheet hidden>
+    <div class="sheet__backdrop" data-sheet-close></div>
+    <div class="sheet__panel" role="dialog" aria-modal="true" aria-labelledby="sheet-title" data-sheet-panel></div>
+  </div>
+</div>
+{% endblock %}
+
+{% block scripts %}<script src="{{ asset('js/admin.js') }}" defer></script>{% endblock %}

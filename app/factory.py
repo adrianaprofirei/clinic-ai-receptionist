@@ -19,6 +19,7 @@ from .chat.llm import LLMClient, OpenAIChat
 from .chat.service import ChatService
 from .events import EventBus
 from .maintenance import run_maintenance
+from .routers import admin as admin_router
 from .routers import chat as chat_router
 from .routers import pages as pages_router
 from .web import STATIC_DIR, CachedStaticFiles, SecurityHeadersMiddleware
@@ -99,6 +100,7 @@ def create_app(
     app.mount("/static", CachedStaticFiles(directory=STATIC_DIR), name="static")
     app.include_router(pages_router.router)
     app.include_router(chat_router.router)
+    app.include_router(admin_router.router)
 
     @app.get("/healthz", include_in_schema=False)
     def healthz() -> dict:
