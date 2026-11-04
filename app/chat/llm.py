@@ -6,11 +6,12 @@ from __future__ import annotations
 
 import logging
 from dataclasses import dataclass, field
-from typing import Protocol
-
-import httpx
+from typing import TYPE_CHECKING, Protocol
 
 from ..config import Settings
+
+if TYPE_CHECKING:  # the OpenAI SDK (v3) ships its own HTTP client, httpx2
+    import httpx2
 
 log = logging.getLogger("zambet.llm")
 
@@ -41,7 +42,7 @@ class LLMClient(Protocol):
 class OpenAIChat:
     """Chat Completions with tool calling."""
 
-    def __init__(self, settings: Settings, *, http_client: httpx.Client | None = None) -> None:
+    def __init__(self, settings: Settings, *, http_client: httpx2.Client | None = None) -> None:
         from openai import OpenAI
 
         kwargs: dict = {

@@ -11,7 +11,7 @@ import itertools
 import json
 from datetime import datetime
 
-import httpx
+import httpx2
 import pytest
 from fastapi.testclient import TestClient
 from sqlalchemy import select
@@ -319,10 +319,10 @@ def test_provider_errors_fall_back_to_the_demo_flow(ai):
 def test_openai_adapter_speaks_the_chat_completions_api():
     seen = {}
 
-    def handler(request: httpx.Request) -> httpx.Response:
+    def handler(request: httpx2.Request) -> httpx2.Response:
         seen["url"] = str(request.url)
         seen["body"] = json.loads(request.content)
-        return httpx.Response(200, json={
+        return httpx2.Response(200, json={
             "id": "chatcmpl-1", "object": "chat.completion", "created": 0, "model": "gpt-4.1-mini",
             "choices": [{"index": 0, "finish_reason": "tool_calls", "message": {
                 "role": "assistant", "content": None,
@@ -333,7 +333,7 @@ def test_openai_adapter_speaks_the_chat_completions_api():
 
     settings = Settings(openai_api_key="sk-test", openai_model="gpt-4.1-mini", max_reply_tokens=300,
                         openai_base_url="https://llm.example/v1")
-    adapter = OpenAIChat(settings, http_client=httpx.Client(transport=httpx.MockTransport(handler)))
+    adapter = OpenAIChat(settings, http_client=httpx2.Client(transport=httpx2.MockTransport(handler)))
     result = adapter.complete([{"role": "user", "content": "Bună"}], [{"type": "function", "function": {
         "name": "list_services", "parameters": {"type": "object", "properties": {}}}}])
 
@@ -347,7 +347,7 @@ def test_openai_adapter_speaks_the_chat_completions_api():
 def test_openai_adapter_wraps_provider_errors():
     adapter = OpenAIChat(
         Settings(openai_api_key="sk-test"),
-        http_client=httpx.Client(transport=httpx.MockTransport(lambda r: httpx.Response(401, json={"error": {}}))),
+        http_client=httpx2.Client(transport=httpx2.MockTransport(lambda r: httpx2.Response(401, json={"error": {}}))),
     )
     with pytest.raises(LLMError):
         adapter.complete([{"role": "user", "content": "x"}], [])
