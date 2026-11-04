@@ -20,6 +20,8 @@ from .chat.service import ChatService
 from .events import EventBus
 from .maintenance import run_maintenance
 from .routers import chat as chat_router
+from .routers import pages as pages_router
+from .web import STATIC_DIR, CachedStaticFiles, SecurityHeadersMiddleware
 
 log = logging.getLogger("zambet")
 
@@ -93,6 +95,9 @@ def create_app(
         settings=settings, session_factory=session_factory, clock=clock, bus=bus, agent=agent
     )
 
+    app.add_middleware(SecurityHeadersMiddleware)
+    app.mount("/static", CachedStaticFiles(directory=STATIC_DIR), name="static")
+    app.include_router(pages_router.router)
     app.include_router(chat_router.router)
 
     @app.get("/healthz", include_in_schema=False)

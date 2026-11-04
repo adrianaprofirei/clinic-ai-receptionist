@@ -1,0 +1,36 @@
+{% import "_macros.html" as ui %}
+<div class="chat-dock" data-chat>
+  <section class="chat-panel" id="chat" role="dialog" aria-labelledby="chat-title" hidden>
+    <header class="chat-head">
+      <span class="avatar">{{ ui.smile(24) }}</span>
+      <div class="chat-head__title">
+        <h2 id="chat-title">Asistent Zâmbet</h2>
+        <p class="status-line"><span class="status-dot" data-chat-dot></span><span data-chat-status>Online · răspunde imediat</span></p>
+      </div>
+      <button class="icon-button" type="button" aria-label="Închide chatul" data-chat-close>{{ ui.icon("close", 22, 2.2) }}</button>
+    </header>
+    <p class="chat-banner">{{ ui.icon("info", 15, 2.2) }}<span data-chat-banner>Demo – clinică fictivă · datele se șterg zilnic</span></p>
+    <div class="chat-log" role="log" aria-label="Conversația cu asistentul" data-chat-log></div>
+    <form class="chat-composer" data-chat-form>
+      <label class="visually-hidden" for="chat-input">Mesajul tău</label>
+      <textarea id="chat-input" rows="1" maxlength="500" placeholder="Scrie un mesaj…" aria-describedby="chat-limit" data-chat-input></textarea>
+      <button class="send-button" type="submit" aria-label="Trimite mesajul" data-chat-send>{{ ui.icon("send", 22, 2.2) }}</button>
+    </form>
+    <p class="chat-limit" id="chat-limit" aria-live="polite" data-chat-limit hidden><span data-chat-limit-text></span><span class="num" data-chat-count></span></p>
+    <p class="chat-footnote" data-chat-footnote>Asistent automat · nu oferă sfaturi medicale</p>
+  </section>
+
+  <div class="chat-greeting" data-chat-greeting hidden>
+    <button class="chat-greeting__open" type="button" data-chat-greeting-open><strong class="chat-greeting__hello">Bună!</strong> Te ajut cu o programare?</button>
+    <button class="icon-button" type="button" aria-label="Ascunde mesajul" data-chat-greeting-close>{{ ui.icon("close", 16, 2.4) }}</button>
+  </div>
+
+  <button class="chat-launcher" type="button" aria-label="Întreabă asistentul" aria-expanded="false" aria-controls="chat" data-chat-launcher>
+    <span class="chat-launcher__icon">{{ ui.icon("chat", 20, 2) }}</span>
+    <span class="chat-launcher__label">Întreabă asistentul</span>
+    <span class="chat-launcher__close">{{ ui.icon("close", 24, 2.2) }}</span>
+  </button>
+</div>
+<noscript>
+  <p class="wrap">Asistentul are nevoie de JavaScript. Ne poți suna la <a href="tel:{{ clinic.phone_tel }}">{{ clinic.phone_display }}</a>.</p>
+</noscript>

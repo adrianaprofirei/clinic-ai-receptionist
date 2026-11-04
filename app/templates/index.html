@@ -1,0 +1,297 @@
+{% extends "_layout.html" %}
+{% import "_macros.html" as ui %}
+
+{% block styles %}
+<link rel="stylesheet" href="{{ asset('css/site.css') }}">
+<link rel="stylesheet" href="{{ asset('css/chat.css') }}">
+{% endblock %}
+
+{% block body %}
+<a class="skip-link" href="#continut">Sari la conținut</a>
+<div id="top"></div>
+
+<div class="demo-bar">
+  <div class="wrap demo-bar__inner">
+    <p class="demo-bar__note">
+      <span class="tag tag--demo">Demo – clinică fictivă</span>
+      <span class="only-wide">Serviciile, prețurile și programările sunt exemple. Datele introduse se șterg automat după 24 de ore.</span>
+      <span class="only-narrow">Prețuri și programări de exemplu</span>
+    </p>
+    <a class="demo-bar__link" href="#calculator">Ai o clinică? Vezi câți pacienți pierzi →</a>
+  </div>
+</div>
+
+<header class="site-header">
+  <div class="wrap site-header__inner">
+    <a class="brand" href="#top" aria-label="{{ clinic.name }}, începutul paginii">
+      {{ ui.logo(40) }}
+      <span class="brand__text">
+        <span class="brand__name">{{ clinic.brand }}</span>
+        <span class="brand__sub">Clinica dentară · {{ clinic.city }}</span>
+      </span>
+    </a>
+    <nav class="site-nav" aria-label="Principal">
+      <a href="#servicii">Servicii și prețuri</a>
+      <a href="#programare">Cum te programezi</a>
+      <a href="#program">Program și adresă</a>
+      <a href="#calculator">Pentru clinici</a>
+    </nav>
+    <div class="site-header__actions">
+      <a class="phone-link" href="tel:{{ clinic.phone_tel }}" aria-label="Sună la clinică: {{ clinic.phone_display }}">
+        {{ ui.icon("phone", 20, 1.8) }}<span class="phone-link__text">{{ clinic.phone_display }}</span>
+      </a>
+      <a class="btn btn--primary site-header__cta" href="#chat" data-open-chat>Programează-te</a>
+      <button class="menu-button" type="button" aria-label="Deschide meniul" aria-expanded="false" aria-controls="meniu-mobil" data-menu-toggle>
+        {{ ui.icon("menu", 24) }}
+      </button>
+    </div>
+  </div>
+  <nav class="mobile-nav" id="meniu-mobil" aria-label="Meniu" hidden>
+    <ul>
+      <li><a href="#servicii">Servicii și prețuri</a></li>
+      <li><a href="#programare">Cum te programezi</a></li>
+      <li><a href="#program">Program și adresă</a></li>
+      <li><a href="#calculator">Pentru clinici</a></li>
+      <li><a href="#chat" data-open-chat>Programează-te prin chat</a></li>
+    </ul>
+  </nav>
+</header>
+
+<main id="continut">
+  <section class="hero" aria-labelledby="hero-title">
+    <div class="wrap hero__inner">
+      <div class="hero__copy">
+        <p class="hero__badge"><span class="hero__badge-icon">{{ ui.icon("pin", 14, 2.2) }}</span>Clinică stomatologică în {{ clinic.city }}</p>
+        <h1 class="hero__title" id="hero-title">Întreabă orice. <em><span class="nowrap">Programează-te</span> pe loc.</em></h1>
+        <p class="hero__lead">Asistentul Clinicii {{ clinic.brand }} îți răspunde imediat despre servicii, prețuri și program, apoi îți arată doar orele libere reale. Oricând, în română sau în engleză.</p>
+        <div class="hero__actions">
+          <a class="btn btn--primary btn--lg" href="#chat" data-open-chat>{{ ui.icon("chat", 22, 1.9) }}Programează-te prin chat</a>
+          <a class="btn btn--outline btn--lg" href="#servicii"><span class="only-wide">Vezi prețurile</span><span class="only-narrow">Vezi serviciile și prețurile</span></a>
+        </div>
+        <ul class="checklist">
+          <li>{{ ui.icon("check", 18, 2.4) }}Răspuns imediat, 24/7</li>
+          <li>{{ ui.icon("check", 18, 2.4) }}Doar ore libere reale</li>
+          <li>{{ ui.icon("check", 18, 2.4) }}Confirmare pe loc</li>
+        </ul>
+      </div>
+
+      <div class="hero__art" role="img" aria-label="Exemplu de conversație: asistentul propune ore libere pentru un detartraj, iar programarea este confirmată pentru {{ example.aria_day }}, la 11:00.">
+        <div class="hero__arch"></div>
+        <div class="hero__sun"></div>
+        <div class="mock-chat">
+          <div class="mock-chat__head">
+            <span class="avatar">{{ ui.smile(22) }}</span>
+            <span class="mock-chat__title">
+              <strong>Asistent Zâmbet</strong>
+              <span class="status-line"><span class="status-dot"></span>Online · răspunde imediat</span>
+            </span>
+            <span class="tag tag--demo-soft">Demo</span>
+          </div>
+          <div class="mock-chat__body">
+            <p class="bubble bubble--user">Bună! Aveți loc {{ example.ask_day }} pentru un detartraj?</p>
+            <p class="bubble">Da! Detartrajul durează {{ example.duration }} de minute și costă {{ example.price }} lei. {{ example.answer_day }}, am liber la:</p>
+            <div class="mock-chat__chips">
+              <span class="mock-chip">09:00</span>
+              <span class="mock-chip mock-chip--on">11:00</span>
+              <span class="mock-chip">16:00</span>
+              <span class="mock-chip">Altă oră</span>
+            </div>
+            <p class="bubble bubble--user">11:00, vă rog.</p>
+            <span class="bubble bubble--typing"><span class="dots"><span></span><span></span><span></span></span></span>
+          </div>
+        </div>
+        <div class="hero__toast">
+          <span class="hero__toast-icon">{{ ui.icon("check", 20, 2.6) }}</span>
+          <span class="hero__toast-text"><strong>Programare confirmată</strong><span>{{ example.toast }}</span></span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="services" id="servicii" aria-labelledby="servicii-title">
+    <div class="wrap section services__inner">
+      <div class="services__top">
+        <div class="section__head">
+          <p class="eyebrow">Servicii și prețuri</p>
+          <h2 class="section__title" id="servicii-title">Prețuri clare, afișate dinainte.</h2>
+          <p class="section__lead">Fiecare serviciu are o durată fixă, așa că asistentul îți propune doar ore în care încape programarea ta.</p>
+        </div>
+        <p class="notice-pill">{{ ui.icon("info", 16, 2.2) }}Prețuri demonstrative, clinică fictivă</p>
+      </div>
+      <ul class="service-list">
+        {% for s in services %}
+        <li class="service">
+          <div class="service__text">
+            <h3 class="service__name">{{ s.name }}</h3>
+            <p class="service__desc">{{ s.description }}</p>
+          </div>
+          <div class="service__meta">
+            <span class="duration">{{ ui.icon("clock", 16) }}{{ s.duration_min }} min</span>
+            <p class="price">{{ s.price }} <small>lei</small></p>
+            <a class="btn btn--line" href="#chat" data-open-chat data-service="{{ s.id }}" data-service-name="{{ s.name }}" aria-label="Programează: {{ s.name }}">Programează</a>
+          </div>
+        </li>
+        {% endfor %}
+      </ul>
+    </div>
+  </section>
+
+  <section class="steps" id="programare" aria-labelledby="programare-title">
+    <div class="wrap section steps__inner">
+      <div class="section__head">
+        <p class="eyebrow">Cum te programezi</p>
+        <h2 class="section__title" id="programare-title">Patru pași, toți în chat.</h2>
+        <p class="section__lead">Fără formulare lungi și fără așteptare la telefon. Durează cam un minut.</p>
+      </div>
+      <ol class="step-list">
+        <li class="step">
+          <span class="step__num" aria-hidden="true">1</span>
+          <h3 class="step__title">Întrebi ce vrei să știi</h3>
+          <p>Servicii, prețuri, program sau adresă. Răspunsul vine pe loc, în română sau în engleză.</p>
+        </li>
+        <li class="step">
+          <span class="step__num" aria-hidden="true">2</span>
+          <h3 class="step__title">Alegi o oră liberă</h3>
+          <p>Vezi doar orele în care încape serviciul ales, în programul clinicii.</p>
+        </li>
+        <li class="step">
+          <span class="step__num" aria-hidden="true">3</span>
+          <h3 class="step__title">Confirmi datele</h3>
+          <p>Lași numele și telefonul, verifici rezumatul și abia apoi confirmi.</p>
+        </li>
+        <li class="step">
+          <span class="step__num step__num--done" aria-hidden="true">{{ ui.icon("check", 22, 2.6) }}</span>
+          <h3 class="step__title">Gata, te așteptăm</h3>
+          <p>Primești confirmarea în chat, iar recepția vede programarea imediat.</p>
+        </li>
+      </ol>
+
+      <div class="info-cards">
+        <div class="info-card" id="program">
+          <h3 class="info-card__title">{{ ui.icon("clock", 22) }}Program</h3>
+          <dl class="hours">
+            {% for row in hours %}
+            <dt>{{ row.label }}</dt><dd>{{ row.value }}</dd>
+            {% endfor %}
+          </dl>
+          <p class="info-card__note">Asistentul răspunde și când clinica e închisă. Programările se fac doar în orele de program.</p>
+        </div>
+        <div class="info-card info-card--address">
+          <h3 class="info-card__title">{{ ui.icon("pin", 22) }}Adresă</h3>
+          <p class="info-card__strong">{{ clinic.address }}</p>
+          <p class="info-card__small">Adresă fictivă, pentru demo. Telefon: <a href="tel:{{ clinic.phone_tel }}"><strong>{{ clinic.phone_display }}</strong></a></p>
+          <div class="map-slot" data-map data-map-src="{{ map_src }}">
+            <p>Harta se încarcă doar dacă o ceri.</p>
+            <button class="btn btn--line" type="button" data-map-load>Arată harta</button>
+          </div>
+        </div>
+        <div class="urgent-card">
+          <span class="urgent-card__icon">{{ ui.icon("phone", 22, 1.9) }}</span>
+          <h3 class="info-card__title">Durere, umflătură sau o urgență?</h3>
+          <p>Asistentul nu oferă sfaturi medicale. Sună-ne direct și te ajutăm cât mai repede.</p>
+          <a class="btn btn--danger" href="tel:{{ clinic.phone_tel }}">{{ ui.icon("phone", 20, 1.9) }}Sună la {{ clinic.phone_display }}</a>
+          <p class="urgent-card__112">Ai dificultăți de respirație sau la înghițire? Sună imediat la 112.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="calc on-dark" id="calculator" aria-labelledby="calc-title">
+    <div class="wrap calc__inner">
+      <div class="calc__head">
+        <p class="eyebrow"><span class="only-wide">Pentru proprietari și manageri de clinici</span><span class="only-narrow">Pentru clinici</span></p>
+        <h2 class="calc__title" id="calc-title">Câți pacienți pierzi lunar?</h2>
+        <p class="calc__lead">Un mesaj fără răspuns sau un apel pierdut ajunge, de multe ori, la altă clinică. Pune cifrele tale și vezi cât te costă.</p>
+      </div>
+
+      <div class="calc__grid">
+        <form class="calc-form on-light" data-calculator novalidate>
+          <p class="calc-note">{{ ui.icon("info", 18) }}<span class="only-wide">Am pus <strong>valori de exemplu</strong>, nu statistici. Schimbă-le cu cifrele clinicii tale.</span><span class="only-narrow"><strong>Valori de exemplu</strong>, nu statistici. Pune cifrele clinicii tale.</span></p>
+          {% for f in calc_fields %}
+          <div class="calc-field">
+            <label for="calc-{{ f.key }}" id="calc-{{ f.key }}-label">{% if f.label_short %}<span class="only-wide">{{ f.label }}</span><span class="only-narrow">{{ f.label_short }}</span>{% else %}{{ f.label }}{% endif %}</label>
+            <div class="calc-box">
+              <input id="calc-{{ f.key }}" name="{{ f.key }}" type="number" inputmode="{{ f.inputmode }}" min="0" max="{{ f.max }}" step="{{ f.step }}" value="{{ f.value }}" aria-describedby="calc-{{ f.key }}-hint" data-calc-input="{{ f.key }}">
+              <span>{{ f.unit }}</span>
+            </div>
+            <p class="calc-field__hint" id="calc-{{ f.key }}-hint"><span class="only-wide">{{ f.hint }}</span><span class="only-narrow">{{ f.hint_short }}</span></p>
+            <input type="range" min="0" max="{{ f.range_max }}" step="{{ f.step }}" value="{{ f.value }}" aria-labelledby="calc-{{ f.key }}-label" data-calc-range="{{ f.key }}">
+          </div>
+          {% endfor %}
+        </form>
+
+        <div class="calc-result">
+          <div class="calc-result__live" aria-live="polite">
+            <div>
+              <p class="calc-result__label">Pacienți pierduți pe lună</p>
+              <p class="calc-result__big" data-calc-out="lostPatients">{{ calc.formatted().lost_patients }}</p>
+            </div>
+            <div class="calc-result__rows">
+              <div class="calc-result__row">
+                <p>Venit pierdut pe lună</p>
+                <p class="calc-result__money"><span data-calc-out="monthlyRevenue">{{ calc.formatted().monthly_revenue }}</span> RON</p>
+              </div>
+              <div class="calc-result__row">
+                <p>Venit pierdut pe an</p>
+                <p class="calc-result__money calc-result__money--year"><span data-calc-out="yearlyRevenue">{{ calc.formatted().yearly_revenue }}</span> RON</p>
+              </div>
+            </div>
+          </div>
+          <details class="formula" open data-formula>
+            <summary>Cum am calculat</summary>
+            <p>Cereri pe lună × procentul rămas fără răspuns × procentul care devin pacienți × valoarea medie a unui pacient.</p>
+            {% set fmt = calc.formatted() %}
+            <ol>
+              <li>Cereri fără răspuns: <strong><span data-calc-out="inquiries">{{ fmt.inquiries }}</span> × <span data-calc-out="missedPct">{{ fmt.missed_pct }}</span>% = <span data-calc-out="unanswered">{{ fmt.unanswered }}</span></strong></li>
+              <li>Pacienți pierduți: <strong><span data-calc-out="unanswered">{{ fmt.unanswered }}</span> × <span data-calc-out="conversionPct">{{ fmt.conversion_pct }}</span>% = <span data-calc-out="lostPatients">{{ fmt.lost_patients }}</span></strong></li>
+              <li>Pe lună: <strong><span data-calc-out="lostPatients">{{ fmt.lost_patients }}</span> × <span data-calc-out="valueRon">{{ fmt.value_ron }}</span> RON = <span data-calc-out="monthlyRevenue">{{ fmt.monthly_revenue }}</span> RON</strong></li>
+              <li>Pe an: <strong><span data-calc-out="monthlyRevenue">{{ fmt.monthly_revenue }}</span> RON × 12 = <span data-calc-out="yearlyRevenue">{{ fmt.yearly_revenue }}</span> RON</strong></li>
+            </ol>
+          </details>
+        </div>
+      </div>
+
+      <div class="calc-cta">
+        <div class="cta-card on-light">
+          <div class="cta-card__text">
+            <h3 class="cta-card__title">Vrei asistentul ăsta pentru clinica ta?</h3>
+            <p>Îl configurăm pe serviciile, prețurile și programul tău, pe site și pe WhatsApp. Începem cu un demo gratuit<span class="only-wide">, făcut pe clinica ta</span>.</p>
+          </div>
+          <a class="btn btn--ink" href="#contact">Cere un demo gratuit{{ ui.icon("arrow", 20, 2.2) }}</a>
+        </div>
+        <p class="calc-disclaimer">Estimare simplă, făcută doar cu cifrele introduse de tine. Nu este o garanție de rezultat.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="contact" id="contact" aria-labelledby="contact-title">
+    <div class="wrap contact__inner">
+      <div class="contact__copy">
+        <p class="eyebrow">{{ agency_name }} · asistenți și programări automate</p>
+        <h2 class="section__title" id="contact-title">Hai să-l construim pentru clinica ta.</h2>
+        <p class="section__lead">Spune-ne ce servicii ai, cum primești acum programările și pe ce canale îți scriu pacienții. Îți pregătim un demo configurat pe clinica ta.</p>
+        <a class="contact__email" href="mailto:{{ contact_email }}?subject=Demo%20asistent%20pentru%20clinic%C4%83">{{ contact_email }}</a>
+        <p class="contact__small">Lucrăm cu clinici și saloane din Iași.</p>
+      </div>
+      <div class="benefits">
+        <h3>Ce primește clinica ta</h3>
+        <ul>
+          <li><span class="tick">{{ ui.icon("check", 16, 2.8) }}</span><span>Asistent pe site, care răspunde oricând, în română și în engleză</span></li>
+          <li><span class="tick">{{ ui.icon("check", 16, 2.8) }}</span><span>Programări direct în calendar, fără suprapuneri</span></li>
+          <li><span class="tick">{{ ui.icon("check", 16, 2.8) }}</span><span>Panou pentru recepție, actualizat în timp real</span></li>
+          <li><span class="tick">{{ ui.icon("check", 16, 2.8) }}</span><span>Același asistent și pe WhatsApp</span></li>
+        </ul>
+      </div>
+    </div>
+  </section>
+</main>
+
+{% include "_footer.html" %}
+{% include "_chat.html" %}
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ asset('js/calculator.js') }}" defer></script>
+<script src="{{ asset('js/site.js') }}" defer></script>
+<script src="{{ asset('js/chat.js') }}" defer></script>
+{% endblock %}
