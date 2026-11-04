@@ -1,0 +1,4 @@
+-r requirements.txt
+pytest==9.2.0
+# HTTP client used by Starlette's TestClient (also installed by the OpenAI SDK).
+httpx2==2.16.0

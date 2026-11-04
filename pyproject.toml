@@ -1,0 +1,10 @@
+[project]
+name = "clinic-ai-receptionist"
+version = "1.0.0"
+description = "AI receptionist and lost-revenue calculator for a fictional dental clinic in Iași (sales demo)."
+requires-python = ">=3.12"
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-q"
+filterwarnings = ["error::DeprecationWarning:app.*"]

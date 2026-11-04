@@ -1,0 +1,30 @@
+services:
+  app:
+    build: .
+    image: clinic-ai-receptionist:latest
+    restart: unless-stopped
+    env_file:
+      - path: .env
+        required: false # without .env: demo mode + a generated admin password (see the logs)
+    environment:
+      DATABASE_URL: sqlite:////app/data/clinic.db
+    ports:
+      # Only reachable from the host: nginx terminates TLS and proxies to it.
+      - "127.0.0.1:8000:8000"
+    volumes:
+      - zambet-data:/app/data
+    read_only: true
+    tmpfs:
+      - /tmp
+    cap_drop:
+      - ALL
+    security_opt:
+      - no-new-privileges:true
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+volumes:
+  zambet-data:

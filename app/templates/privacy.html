@@ -1,0 +1,53 @@
+{% extends "_layout.html" %}
+{% import "_macros.html" as ui %}
+
+{% block title %}Confidențialitate (demo) · {{ clinic.name }}{% endblock %}
+{% block styles %}<link rel="stylesheet" href="{{ asset('css/site.css') }}">{% endblock %}
+
+{% block body %}
+<div class="demo-bar">
+  <div class="wrap demo-bar__inner">
+    <p class="demo-bar__note"><span class="tag tag--demo">Demo – clinică fictivă</span><span>Datele introduse se șterg automat după 24 de ore.</span></p>
+  </div>
+</div>
+<header class="site-header">
+  <div class="wrap site-header__inner">
+    <a class="brand" href="/" aria-label="{{ clinic.name }}, pagina principală">
+      {{ ui.logo(40) }}
+      <span class="brand__text"><span class="brand__name">{{ clinic.brand }}</span><span class="brand__sub">Clinica dentară · {{ clinic.city }}</span></span>
+    </a>
+    <a class="btn btn--line" href="/">Înapoi la pagina principală</a>
+  </div>
+</header>
+
+<main class="wrap prose" id="continut">
+  <p class="eyebrow">Confidențialitate</p>
+  <h1>Ce se întâmplă cu datele tale</h1>
+  <p>{{ clinic.name }} este o clinică fictivă. Site-ul este un demo realizat de {{ agency_name }}, ca să arate cum funcționează un asistent de programări. Te rugăm să nu scrii date medicale în chat.</p>
+
+  <h2>Ce date folosim</h2>
+  <ul>
+    <li><strong>Numele și telefonul</strong>, doar dacă faci o programare. Le folosim numai pentru acea programare.</li>
+    <li><strong>Mesajele din chat</strong>, ca asistentul să țină minte conversația (ultimele aproximativ 20 de mesaje).</li>
+    <li><strong>Un cookie tehnic</strong> (<code>zb_chat</code>) care leagă browserul tău de conversație. Nu folosim cookie-uri de marketing sau de analiză.</li>
+  </ul>
+
+  <h2>Cât timp le păstrăm</h2>
+  <p>Programările și conversațiile se șterg automat după 24 de ore. Programările de exemplu din calendar sunt generate zilnic și nu aparțin unor persoane reale.</p>
+
+  <h2>Cine le vede</h2>
+  <ul>
+    <li>Recepția clinicii, în panoul de administrare protejat cu parolă.</li>
+    <li>În modul AI, mesajele sunt trimise către OpenAI ca să fie generat răspunsul. Numerele de telefon sunt înlocuite cu un cod înainte de trimitere. În modul demo, cu butoane, nimic nu pleacă de pe server.</li>
+    <li>Fonturile sunt găzduite pe acest server. Harta (OpenStreetMap) se încarcă doar dacă apeși „Arată harta”.</li>
+  </ul>
+
+  <h2>Drepturile tale</h2>
+  <p>Poți cere oricând ștergerea datelor la <a href="mailto:{{ contact_email }}">{{ contact_email }}</a>. Oricum, ele se șterg singure după 24 de ore.</p>
+
+  <h2 lang="en">In English</h2>
+  <p lang="en" class="muted">This is a demo for a fictional clinic. Your name and phone are used only for the booking you make; bookings and chats are deleted automatically after 24 hours. In AI mode, messages are processed by OpenAI with phone numbers replaced by placeholders; in demo mode nothing leaves the server. A single functional cookie keeps your conversation.</p>
+</main>
+
+{% include "_footer.html" %}
+{% endblock %}

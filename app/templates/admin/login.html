@@ -1,0 +1,51 @@
+{% extends "_layout.html" %}
+{% import "_macros.html" as ui %}
+
+{% block title %}Panou recepție · {{ clinic.name }}{% endblock %}
+{% block robots %}noindex, nofollow{% endblock %}
+{% block styles %}<link rel="stylesheet" href="{{ asset('css/admin.css') }}">{% endblock %}
+{% block body_class %}admin-login-page{% endblock %}
+
+{% block body %}
+<div class="login-shell">
+  <header class="login-header">
+    <div class="admin-brand">
+      {{ ui.logo(36) }}
+      <p><span class="admin-brand__name">{{ clinic.brand }}</span><span class="admin-brand__sub">Panou recepție</span></p>
+    </div>
+    <span class="tag tag--demo">Demo – clinică fictivă</span>
+  </header>
+
+  <main class="login-main">
+    <div class="login-card">
+      <div class="login-card__intro">
+        <span class="login-card__icon">{{ ui.icon("lock", 22, 2) }}</span>
+        <h1>Panoul recepției</h1>
+        <p>Vezi în timp real programările făcute prin asistent și anulează-le când e nevoie.</p>
+      </div>
+      <form class="login-form" method="post" action="/admin/login" data-login-form>
+        {% if error %}
+        <p class="login-error" role="alert" id="login-error">{{ ui.icon("info", 18, 2.2) }}<span>{{ error }}</span></p>
+        {% endif %}
+        <div class="field">
+          <label class="field__label" for="adm-pass">Parolă</label>
+          <div class="password-box">
+            <input id="adm-pass" name="password" type="password" autocomplete="current-password" required autofocus
+                   {% if error %}aria-invalid="true" aria-describedby="login-error"{% endif %}>
+            <button class="icon-toggle" type="button" aria-label="Arată parola" aria-pressed="false" data-toggle-password>{{ ui.icon("eye", 22, 1.9) }}</button>
+          </div>
+        </div>
+        <button class="btn btn--primary btn--md btn--block" type="submit">Intră în panou</button>
+      </form>
+      <p class="login-card__note">Doar pentru personalul clinicii. După 5 încercări greșite, accesul se blochează 15 minute.</p>
+      {% if password_generated %}
+      <p class="login-card__note">Parola nu a fost setată (<code>ADMIN_PASSWORD</code>), așa că a fost generată la pornire și apare în jurnalul aplicației.</p>
+      {% endif %}
+    </div>
+  </main>
+
+  <footer class="login-footer">Demo – clinică fictivă · datele se șterg automat după 24 de ore · <a href="/">Pagina principală</a></footer>
+</div>
+{% endblock %}
+
+{% block scripts %}<script src="{{ asset('js/admin-login.js') }}" defer></script>{% endblock %}

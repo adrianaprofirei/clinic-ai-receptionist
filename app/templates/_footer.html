@@ -1,0 +1,14 @@
+{% import "_macros.html" as ui %}
+<footer class="site-footer">
+  <div class="wrap site-footer__inner">
+    <div class="site-footer__about">
+      {{ ui.logo(32) }}
+      <p>{{ clinic.name }} este o clinică fictivă, creată pentru demonstrație. Serviciile, prețurile, adresa și telefonul sunt exemple, iar programările făcute aici se șterg automat după 24 de ore.</p>
+    </div>
+    <nav aria-label="Subsol">
+      <a href="/confidentialitate">Confidențialitate (demo)</a>
+      <a href="/admin">Panou recepție</a>
+    </nav>
+    <p class="site-footer__credit">Demo realizat de <strong>{{ agency_name }}</strong></p>
+  </div>
+</footer>

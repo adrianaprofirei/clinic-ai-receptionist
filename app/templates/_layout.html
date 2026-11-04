@@ -1,0 +1,21 @@
+<!doctype html>
+<html lang="ro">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{% block title %}{{ clinic.name }} · Iași{% endblock %}</title>
+<meta name="description" content="{% block description %}Demo: asistent AI pentru o clinică dentară fictivă din Iași. Răspunde despre servicii, prețuri și program și face programări în chat.{% endblock %}">
+<meta name="robots" content="{% block robots %}index, follow{% endblock %}">
+<meta name="theme-color" content="#1D5C4F">
+<link rel="icon" href="{{ asset('img/favicon.svg') }}" type="image/svg+xml">
+{# Same URLs as the @font-face rules in base.css, so the preload is reused. #}
+<link rel="preload" href="/static/fonts/figtree-latin.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="/static/fonts/bricolage-latin.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="{{ asset('css/base.css') }}">
+{% block styles %}{% endblock %}
+</head>
+<body class="{% block body_class %}{% endblock %}">
+{% block body %}{% endblock %}
+{% block scripts %}{% endblock %}
+</body>
+</html>
