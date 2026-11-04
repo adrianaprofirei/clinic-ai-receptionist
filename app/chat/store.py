@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 import secrets
-from datetime import datetime, timedelta
+from datetime import datetime
 
 from sqlalchemy import select
 from sqlalchemy.orm import Session
@@ -86,6 +86,3 @@ def message_payload(msg: ChatMessage, local_time: datetime) -> dict:
         "at": local_time.replace(microsecond=0).isoformat(),
     }
 
-
-def expiry(created_at: datetime, retention_hours: int) -> datetime:
-    return created_at + timedelta(hours=retention_hours)

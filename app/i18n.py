@@ -49,15 +49,6 @@ def fmt_date(d: date, lang: str, *, year: bool = False, capital: bool = True) ->
     return f"{text} {d.year}" if year else text
 
 
-def fmt_date_compact(d: date, lang: str) -> str:
-    """'joi, 5 nov' / 'Thu, 5 Nov'."""
-    lang = norm_lang(lang)
-    wd = WEEKDAYS_SHORT[lang][d.weekday()]
-    if lang == "ro":
-        wd = WEEKDAYS[lang][d.weekday()]
-    return f"{wd}, {d.day} {MONTHS_SHORT[lang][d.month - 1]}"
-
-
 def fmt_day_parts(d: date, lang: str) -> tuple[str, str]:
     """('Joi', '5 nov') for day picker buttons."""
     lang = norm_lang(lang)

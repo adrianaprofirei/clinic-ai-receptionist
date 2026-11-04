@@ -34,10 +34,6 @@ class Booking(Base):
         back_populates="booking", cascade="all, delete-orphan", passive_deletes=True
     )
 
-    @property
-    def is_active(self) -> bool:
-        return self.status == "confirmed"
-
 
 class SlotClaim(Base):
     """One row per 15-minute block an active booking occupies.
