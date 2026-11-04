@@ -91,6 +91,7 @@ class ChatMessage(Base):
     tool_calls: Mapped[list | None] = mapped_column(JSON, nullable=True)
     tool_call_id: Mapped[str | None] = mapped_column(String(64), nullable=True)
     ui: Mapped[list | None] = mapped_column(JSON, nullable=True)
+    lang: Mapped[str | None] = mapped_column(String(2), nullable=True)
     visible: Mapped[bool] = mapped_column(Boolean, default=True)
     in_llm: Mapped[bool] = mapped_column(Boolean, default=True)
     created_at: Mapped[datetime] = mapped_column(DateTime)  # UTC

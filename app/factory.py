@@ -14,8 +14,10 @@ from . import __version__
 from .clock import Clock
 from .config import Settings, with_generated_secrets
 from .db import init_db, make_engine, make_session_factory
+from .chat.service import ChatService
 from .events import EventBus
 from .maintenance import run_maintenance
+from .routers import chat as chat_router
 
 log = logging.getLogger("zambet")
 
@@ -79,6 +81,9 @@ def create_app(settings: Settings | None = None, *, clock: Clock | None = None) 
     app.state.session_factory = session_factory
     app.state.clock = clock
     app.state.bus = bus
+    app.state.chat = ChatService(settings=settings, session_factory=session_factory, clock=clock, bus=bus)
+
+    app.include_router(chat_router.router)
 
     @app.get("/healthz", include_in_schema=False)
     def healthz() -> dict:
