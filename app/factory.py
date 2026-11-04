@@ -14,6 +14,8 @@ from . import __version__
 from .clock import Clock
 from .config import Settings, with_generated_secrets
 from .db import init_db, make_engine, make_session_factory
+from .events import EventBus
+from .maintenance import run_maintenance
 
 log = logging.getLogger("zambet")
 
@@ -34,11 +36,29 @@ def create_app(settings: Settings | None = None, *, clock: Clock | None = None) 
     init_db(engine)
     session_factory = make_session_factory(engine)
     clock = clock or Clock(settings.timezone)
+    bus = EventBus()
+
+    def maintenance_pass() -> None:
+        report = run_maintenance(session_factory, clock, settings)
+        if report.changed:
+            bus.publish({"type": "reset"})
+
+    async def maintenance_loop(interval_s: float) -> None:
+        while True:
+            await asyncio.sleep(interval_s)
+            try:
+                await asyncio.to_thread(maintenance_pass)
+            except Exception:  # keep the loop alive; the next pass retries
+                log.exception("Maintenance pass failed")
 
     @asynccontextmanager
     async def lifespan(app: FastAPI) -> AsyncIterator[None]:
         log.info("Clinica Zâmbet demo %s starting (AI mode: %s)", __version__, settings.ai_configured)
+        bus.bind(asyncio.get_running_loop())
+        await asyncio.to_thread(maintenance_pass)  # clean up and seed before serving
         tasks: list[asyncio.Task] = []
+        if settings.maintenance_interval_minutes > 0:
+            tasks.append(asyncio.create_task(maintenance_loop(settings.maintenance_interval_minutes * 60)))
         yield
         for task in tasks:
             task.cancel()
@@ -58,6 +78,7 @@ def create_app(settings: Settings | None = None, *, clock: Clock | None = None) 
     app.state.engine = engine
     app.state.session_factory = session_factory
     app.state.clock = clock
+    app.state.bus = bus
 
     @app.get("/healthz", include_in_schema=False)
     def healthz() -> dict:
