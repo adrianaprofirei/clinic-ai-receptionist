@@ -14,6 +14,8 @@ from . import __version__
 from .clock import Clock
 from .config import Settings, with_generated_secrets
 from .db import init_db, make_engine, make_session_factory
+from .chat.agent import Agent
+from .chat.llm import LLMClient, OpenAIChat
 from .chat.service import ChatService
 from .events import EventBus
 from .maintenance import run_maintenance
@@ -29,7 +31,10 @@ def _configure_logging(level: str) -> None:
     )
 
 
-def create_app(settings: Settings | None = None, *, clock: Clock | None = None) -> FastAPI:
+def create_app(
+    settings: Settings | None = None, *, clock: Clock | None = None, llm: LLMClient | None = None
+) -> FastAPI:
+    """Build the app. `llm` overrides the OpenAI client (tests, other providers)."""
     settings = settings or Settings.from_env()
     _configure_logging(settings.log_level)
     settings = with_generated_secrets(settings)
@@ -55,7 +60,7 @@ def create_app(settings: Settings | None = None, *, clock: Clock | None = None) 
 
     @asynccontextmanager
     async def lifespan(app: FastAPI) -> AsyncIterator[None]:
-        log.info("Clinica Zâmbet demo %s starting (AI mode: %s)", __version__, settings.ai_configured)
+        log.info("Clinica Zâmbet demo %s starting (AI mode: %s)", __version__, agent is not None)
         bus.bind(asyncio.get_running_loop())
         await asyncio.to_thread(maintenance_pass)  # clean up and seed before serving
         tasks: list[asyncio.Task] = []
@@ -81,13 +86,18 @@ def create_app(settings: Settings | None = None, *, clock: Clock | None = None) 
     app.state.session_factory = session_factory
     app.state.clock = clock
     app.state.bus = bus
-    app.state.chat = ChatService(settings=settings, session_factory=session_factory, clock=clock, bus=bus)
+    if llm is None and settings.ai_configured:
+        llm = OpenAIChat(settings)
+    agent = Agent(settings, clock, llm) if llm is not None else None
+    app.state.chat = ChatService(
+        settings=settings, session_factory=session_factory, clock=clock, bus=bus, agent=agent
+    )
 
     app.include_router(chat_router.router)
 
     @app.get("/healthz", include_in_schema=False)
     def healthz() -> dict:
-        return {"status": "ok", "ai": settings.ai_configured}
+        return {"status": "ok", "ai": agent is not None}
 
     return app
 
